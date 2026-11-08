@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c232c">
+  <meta name="description" content="危険物取扱者 乙種第6類を親子で学ぶ小さなWebアプリ。DAY1を学んで5問に挑戦できます。">
+  <title>乙6 QUEST | DAY1</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink:#162d37;--muted:#536b76;--teal:#087d73;--deep:#0c2732;
+      --light:#f5f7f3;--cream:#fffdf6;--line:#d8e1df;--accent:#ffd168;
+      --good:#0d6f4d;--bad:#aa3938;--shadow:0 10px 32px rgba(12,39,50,.09);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--light);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;line-height:1.65}
+    button{font:inherit;cursor:pointer} button:focus-visible, a:focus-visible, input:focus-visible{outline:3px solid #ffa53a;outline-offset:3px}
+    .masthead{background:var(--deep);color:#fff;padding:24px 20px 31px;position:relative;overflow:hidden}
+    .masthead:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;border:38px solid rgba(111,214,194,.09);right:-90px;top:-160px}
+    .wrap{max-width:780px;margin:auto}
+    .topline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;position:relative}
+    .brand{font-size:14px;font-weight:850;letter-spacing:.17em;white-space:nowrap}
+    .version{font-size:11px;color:#cce3dc;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:3px 9px}
+    h1{font-size:clamp(27px,5.7vw,43px);letter-spacing:-.04em;line-height:1.3;margin:0 0 9px}
+    .hero-sub{margin:0;color:#d6e9e5;font-size:14px}
+    .main{max-width:780px;margin:-13px auto 0;padding:0 16px 56px;position:relative}
+    .profile{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:17px 19px;margin-bottom:24px}
+    .profile-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:11px}
+    .eyebrow{font-size:12px;color:var(--muted);font-weight:750;letter-spacing:.07em}
+    .offline{color:var(--muted);font-size:12px}
+    .toggle{display:flex;background:#edf3f1;border-radius:12px;padding:4px;gap:4px}
+    .toggle button{flex:1;border:none;background:transparent;color:var(--muted);font-weight:700;border-radius:9px;padding:10px 12px;min-height:44px}
+    .toggle button[aria-pressed="true"]{background:var(--deep);color:white;box-shadow:0 3px 9px rgba(0,0,0,.12)}
+    .section{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:clamp(20px,4vw,30px);margin:0 0 18px}
+    .tag{display:inline-block;background:#e2f4ed;color:var(--good);font-weight:850;font-size:12px;border-radius:999px;padding:4px 11px;letter-spacing:.06em}
+    .h2{font-weight:850;font-size:clamp(23px,4vw,30px);line-height:1.4;letter-spacing:-.03em;margin:13px 0 9px}
+    .intro{color:var(--muted);margin:0 0 22px;font-size:14px}
+    .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 24px}
+    .fact{background:#f3f7f5;border-radius:12px;padding:12px 8px;text-align:center}
+    .fact strong{display:block;font-size:18px}.fact small{font-size:11px;color:var(--muted)}
+    .lesson{padding:18px 0;border-top:1px solid var(--line)}
+    .lesson h3{font-size:17px;margin:0 0 7px}.lesson p{margin:0;font-size:14px}
+    .lesson strong{color:var(--teal)}
+    .notebox{background:#fff5db;border-left:4px solid #e3aa2f;border-radius:8px;padding:13px 15px;margin:18px 0;font-size:13px}
+    .btn{border:none;border-radius:12px;min-height:48px;padding:12px 18px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .primary{background:var(--teal);color:white}.primary:hover{background:#046b63}
+    .secondary{background:#e7f2ef;color:#15594f}.secondary:hover{background:#d7eae4}
+    .outline{background:white;border:1px solid var(--line);color:var(--ink)}.outline:hover{background:#f7faf9}
+    .btn:disabled{cursor:not-allowed;opacity:.45}
+    .stack{display:flex;flex-direction:column;gap:10px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .fine{color:var(--muted);font-size:12px;margin:12px 0 0}
+    .progress{height:9px;background:#e5eeea;border-radius:99px;overflow:hidden;margin:12px 0 24px}
+    .bar{height:100%;background:var(--teal);border-radius:99px;transition:width .2s}
+    .question{font-size:19px;line-height:1.6;font-weight:800;margin:5px 0 23px}
+    .options{display:grid;gap:10px;border:0;padding:0;margin:0 0 20px;min-width:0}
+    .option{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:13px;padding:13px 15px;cursor:pointer;background:#fff}
+    .option:has(input:checked){border-color:var(--teal);background:#eff9f6;box-shadow:inset 0 0 0 1px var(--teal)}
+    .option:has(input:disabled){cursor:default}
+    .option input{accent-color:var(--teal);width:19px;height:19px;flex-shrink:0;margin:3px 0 0}
+    .option span{font-size:14px;line-height:1.55}
+    .feedback{border-radius:13px;padding:17px;margin:16px 0;background:#eff9f4;border:1px solid #badfd1}
+    .feedback.bad{background:#fff5f2;border-color:#efcbc0}
+    .feedback h3{font-size:16px;margin:0 0 5px}.feedback p{margin:0;font-size:14px}
+    .score{display:flex;align-items:baseline;gap:6px;margin:10px 0}.score strong{font-size:48px;line-height:1.2}.score span{color:var(--muted)}
+    .history{width:100%;border-collapse:collapse;font-size:13px}
+    .history th,.history td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}.history th{font-size:12px;color:var(--muted)}
+    .status{display:inline-block;font-size:12px;border-radius:999px;padding:3px 9px;background:#e5f3ec;color:var(--good)}
+    .footer{text-align:center;color:var(--muted);font-size:12px;max-width:700px;margin:auto;padding:0 18px 38px}
+    .hidden{display:none!important} .space{margin-top:14px}.mini{font-size:12px;color:var(--muted)}
+    @media(max-width:480px){.facts{gap:5px}.fact strong{font-size:16px}.main{padding:0 12px 35px}.section{padding:20px 18px}.question{font-size:18px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <div class="topline"><div class="brand">乙6 QUEST <span aria-hidden="true">⚗</span></div><span class="version">PROTOTYPE 0.1</span></div>
+    <h1>危険物の世界を、<br>一問ずつ攻略。</h1>
+    <p class="hero-sub">親子で挑戦する、危険物取扱者 乙種第6類</p>
+  </div>
+</header>
+<main class="main">
+  <section class="profile" aria-label="学習者選択">
+    <div class="profile-top"><span class="eyebrow">WHO'S STUDYING?</span><span class="offline">● この端末に記録</span></div>
+    <div class="toggle" role="group" aria-label="学習者">
+      <button type="button" data-profile="father" aria-pressed="true">お父さん</button>
+      <button type="button" data-profile="keita" aria-pressed="false">ケイタ</button>
+    </div>
+  </section>
+  <div id="app" aria-live="polite"></div>
+</main>
+<footer class="footer">学習用試作品。試験問題は独自作成。公式過去問ではありません。<br>GitHub Pagesに公開しても、回答履歴はGitHubへ送信されません。</footer>
+<script>
+'use strict';
+const STORAGE_KEY = 'otsu6-quest-state-v1';
+const PROFILE_KEY = 'otsu6-quest-active-profile-v1';
+const NAMES = { father:'お父さん', keita:'ケイタ' };
+const questions = [
+  {
+    id:'D01-Q01',topic:'分類',text:'消防法上、第6類危険物に分類されるものはどれ？',
+    options:['酸化性固体','可燃性固体','引火性液体','自己反応性物質','酸化性液体'], answer:4,
+    explain:'第6類は「酸化性液体」。第1類は酸化性固体、第4類は引火性液体。まずは類と性質を対応させよう。'
+  },
+  {
+    id:'D01-Q02',topic:'酸化性',text:'第6類危険物に共通する性質として、最も適切なのはどれ？',
+    options:['自分自身が必ず燃える','すべて空気中で自然発火する','ほかの物質の燃焼を激しくすることがある','すべて水に触れると爆発する','すべて常温で気体である'],answer:2,
+    explain:'第6類は強い酸化作用を示す液体。自らが燃料として燃えるとは限らないが、可燃物の燃焼を促進する場合がある。'
+  },
+  {
+    id:'D01-Q03',topic:'代表物質',text:'第6類危険物の代表的な物質として、正しいものはどれ？',
+    options:['ガソリン','硝酸','硫黄','赤りん','灯油'],answer:1,
+    explain:'硝酸は第6類の代表物質。ほかに過塩素酸、過酸化水素などがある。濃度等によって法令上の扱いが異なる場合があるので、詳細は後の授業で学ぼう。'
+  },
+  {
+    id:'D01-Q04',topic:'分類',text:'「引火性液体」に分類される危険物は何類？',
+    options:['第1類','第2類','第3類','第4類','第6類'],answer:3,
+    explain:'第4類が「引火性液体」。第6類も液体だが「酸化性液体」であり、火災時の危険の性質が違う。'
+  },
+  {
+    id:'D01-Q05',topic:'考え方',text:'第6類危険物について、正しい理解はどれ？',
+    options:['液体なので、すべて同じ方法で消火できる','酸化性を示すため、可燃物との接触に注意する','どの物質も人体に無害である','どの物質も密栓して日光下に置くのがよい','危険なのは火がついた時だけである'],answer:1,
+    explain:'可燃物との接触を避けるのが基本。個々の物質によって水との反応や適切な消火方法は異なるため、一律に覚えないことも重要。'
+  }
+];
+const app = document.getElementById('app');
+let storageOK = true;
+let db = loadDB();
+let profile = loadProfile();
+let view = 'home';
+let reveal = false;
+let selected = -1;
+
+function emptyDB(){return {version:1,profiles:{father:{attempts:[],pending:null},keita:{attempts:[],pending:null}}};}
+function loadDB(){
+  try {
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw) return emptyDB();
+    const parsed=JSON.parse(raw);
+    if(!parsed || parsed.version!==1 || !parsed.profiles) return emptyDB();
+    const db0=emptyDB();
+    for(const p of Object.keys(NAMES)) {
+      const item=parsed.profiles[p] || {};
+      db0.profiles[p].attempts = Array.isArray(item.attempts) ? item.attempts.filter(x=>x && Array.isArray(x.answers)).slice(-100) : [];
+      db0.profiles[p].pending = item.pending && Array.isArray(item.pending.answers) ? item.pending : null;
+    }
+    return db0;
+  }catch(e){storageOK=false;return emptyDB();}
+}
+function saveDB(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db));}catch(e){storageOK=false;}}
+function loadProfile(){try{return localStorage.getItem(PROFILE_KEY)==='keita'?'keita':'father';}catch(e){return 'father';}}
+function setProfile(next){
+  profile=next;try{localStorage.setItem(PROFILE_KEY,profile)}catch(e){}
+  view='home';selected=-1;reveal=false;render();
+}
+function person(){return db.profiles[profile]}
+function fmtDate(s){let dt=new Date(s);return Number.isNaN(dt.getTime())?'-':dt.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function safeScore(attempt){return attempt.answers.filter(a=>a.correct===true).length;}
+function scrollTop(){window.scrollTo({top:0,behavior:'instant'});}
+function e(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
+function addText(parent,tag,cls,text){const node=e(tag,cls,text);parent.append(node);return node;}
+function button(text,cls,fn){const b=e('button','btn '+cls,text);b.type='button';b.addEventListener('click',fn);return b;}
+function makeSection(){const s=e('section','section');app.append(s);return s;}
+function makeHeader(box,badge,title,desc){addText(box,'span','tag',badge);addText(box,'h2','h2',title);if(desc)addText(box,'p','intro',desc);}
+function latest(){const a=person().attempts;return a.length?a[a.length-1]:null;}
+function render(){
+  document.querySelectorAll('[data-profile]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.profile===profile)));
+  app.replaceChildren();
+  if(!storageOK){const warn=e('div','notebox','このブラウザでは記録の保存ができない可能性があります。プライベートブラウズ設定などをご確認ください。');app.append(warn);}
+  if(view==='quiz')return renderQuiz();
+  if(view==='result')return renderResult();
+  if(view==='history')return renderHistory();
+  renderHome();
+}
+function renderHome(){
+  const sec=makeSection();
+  makeHeader(sec,'DAY 01 / 基礎','まずは、危険物って何だろう？','今日の学習は約10〜15分。第6類の入口を理解して、5問の確認テストに挑戦しよう。');
+  const stats=e('div','facts');sec.append(stats);
+  [['DAY','01'],['チェック','5問'],['学習時間','約15分']].forEach(([label,value])=>{const f=e('div','fact');addText(f,'strong','',value);addText(f,'small','',label);stats.append(f);});
+  const lessons=[
+    ['1. 「危険物」＝必ず燃えるもの？','いいえ。危険物には、よく燃えるものだけでなく、ほかの物質の燃焼を助けるものもある。危険の性質に応じて6つの類に分けている。'],
+    ['2. 乙6が扱うのは「酸化性液体」','第6類は酸化性液体。酸化力が強く、可燃物に触れると燃焼を激しくすることがある。自分自身が燃えるとは限らないのがポイント。'],
+    ['3. 代表的な物質を知ろう','過塩素酸、過酸化水素、硝酸など。似た性質があっても、貯蔵・取扱い・消火の注意点は物質によって違う。'],
+    ['4. 第4類と混同しない','第4類はガソリンなどの「引火性液体」。第6類の「酸化性液体」とは、同じ液体でも危険性の種類が違う。']
+  ];
+  lessons.forEach(([title,body])=>{const article=e('article','lesson');addText(article,'h3','',title);addText(article,'p','',body);sec.append(article);});
+  addText(sec,'div','notebox','今日のポイント：第6類＝酸化性液体。「何が燃えるか」だけでなく、「ほかのものを燃えやすくする力」に注目。');
+  const actions=e('div','stack');sec.append(actions);
+  if(person().pending && person().pending.answers.length<questions.length)actions.append(button('途中から再開する（'+(person().pending.answers.length+1)+'問目）','primary',()=>{view='quiz';reveal=false;selected=-1;render();scrollTop();}));
+  actions.append(button(latest()?'5問をもう一度解く':'学んだら、5問に挑戦！','primary',startQuiz));
+  if(latest()){
+    addText(sec,'p','fine',`前回の結果：${safeScore(latest())} / 5問正解（${fmtDate(latest().completedAt)}）`);
+    sec.append(button('学習記録を見る','outline',()=>{view='history';render();scrollTop();}));
+  }
+}
+function startQuiz(){person().pending={day:1,startedAt:new Date().toISOString(),answers:[]};saveDB();selected=-1;reveal=false;view='quiz';render();scrollTop();}
+function renderQuiz(){
+  const state=person().pending;
+  if(!state || state.answers.length>=questions.length){view='home';render();return;}
+  const idx=state.answers.length;const q=questions[idx];
+  const sec=makeSection();
+  const top=e('div','row');sec.append(top);addText(top,'span','tag','DAY 01 / 確認テスト');addText(top,'span','mini',`${idx+1} / ${questions.length} 問`);
+  const pb=e('div','progress');const bar=e('div','bar');bar.style.width=`${idx/questions.length*100}%`;pb.append(bar);sec.append(pb);
+  addText(sec,'div','eyebrow',q.id+' ・ '+q.topic);addText(sec,'h2','question',q.text);
+  const fieldset=e('fieldset','options');fieldset.setAttribute('aria-label','解答を選択');sec.append(fieldset);
+  const radios=[];
+  q.options.forEach((option,i)=>{
+    const label=e('label','option');const input=document.createElement('input');input.type='radio';input.name='answer';input.value=String(i);input.disabled=reveal;
+    input.checked=(selected===i);input.addEventListener('change',()=>{selected=i;submit.disabled=false;});
+    label.append(input,e('span','',`${i+1}. ${option}`));fieldset.append(label);radios.push(input);
+  });
+  const submit=button('回答を確定する','primary',()=>{
+    if(selected<0 || reveal)return;
+    const correct=selected===q.answer;
+    state.answers.push({questionId:q.id,choice:selected,correct,topic:q.topic});
+    saveDB();reveal=true;radios.forEach(x=>x.disabled=true);submit.classList.add('hidden');
+    const result=e('div','feedback'+(correct?'':' bad'));
+    addText(result,'h3','',correct?'正解！':'惜しい！ 正解は '+(q.answer+1)+' 番');
+    addText(result,'p','',q.explain);sec.insertBefore(result,actionRow);
+    nextBtn.classList.remove('hidden');
+    result.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+  submit.disabled=selected<0;
+  const actionRow=e('div','stack');sec.append(actionRow);actionRow.append(submit);
+  const nextBtn=button(idx===questions.length-1?'結果を確認する':'次の問題へ →','secondary',()=>{
+    reveal=false;selected=-1;
+    if(state.answers.length>=questions.length){completeAttempt(state);view='result';}else{view='quiz';}
+    render();scrollTop();
+  });nextBtn.classList.add('hidden');actionRow.append(nextBtn);
+  sec.append(button('学習画面に戻る','outline',()=>{view='home';render();scrollTop();}));
+  addText(sec,'p','fine','回答は1問ずつこの端末に保存。途中で閉じても続きから再開できます。');
+}
+function completeAttempt(state){const p=person();p.attempts.push({day:1,startedAt:state.startedAt,completedAt:new Date().toISOString(),answers:state.answers});p.attempts=p.attempts.slice(-100);p.pending=null;saveDB();}
+function renderResult(){
+  const item=latest();if(!item){view='home';render();return;}
+  const score=safeScore(item),sec=makeSection();
+  makeHeader(sec,'DAY 01 / 学習完了','おつかれさま！','結果を確認して、間違えたポイントを復習しよう。');
+  const sc=e('div','score');addText(sc,'strong','',String(score));addText(sc,'span','',`/ ${questions.length} 問 正解`);sec.append(sc);
+  addText(sec,'p','intro',score===5?'全問正解！ 知識が定着しているか、数日後にも確かめよう。':score>=3?'いい調子。誤答の理由を確認すればさらに安定するよ。':'ここからがスタート。説明に戻って、考え方を確認しよう。');
+  const mistakes=item.answers.filter(a=>!a.correct);
+  if(mistakes.length){addText(sec,'h3','','今回の復習ポイント');mistakes.forEach(a=>{const q=questions.find(x=>x.id===a.questionId);if(!q)return;const box=e('div','lesson');addText(box,'h3','',a.questionId+'・'+a.topic);addText(box,'p','',q.explain);sec.append(box);});}
+  else addText(sec,'p','notebox','間違いはありません。次は理由まで自分の言葉で説明できるか試してみよう。');
+  const actions=e('div','stack');sec.append(actions);
+  actions.append(button('学習記録を確認する','primary',()=>{view='history';render();scrollTop();}));
+  actions.append(button('DAY1の授業に戻る','outline',()=>{view='home';render();scrollTop();}));
+}
+function reportText(){
+  const p=person(),last=latest();
+  const lines=[`【乙6 QUEST 学習ログ】`,`学習者：${NAMES[profile]}`,'学習日：'+(last?fmtDate(last.completedAt):'未受験'),'DAY：1','学習テーマ：危険物の分類と第6類の入口',`今回の正解数：${last?safeScore(last)+' / 5問':'未受験'}`];
+  if(last){const missed=last.answers.filter(a=>!a.correct);lines.push('要復習：'+(missed.length?missed.map(a=>a.questionId+'（'+a.topic+'）').join('、'):'なし'));}
+  lines.push(`受験回数：${p.attempts.length}`, '注：DAY1の小テスト結果。科目別の習熟度を判定するには問題数が不足しています。');
+  return lines.join('\n');
+}
+async function copyReport(btn){
+  const t=reportText();
+  try{await navigator.clipboard.writeText(t);btn.textContent='コピーしました ✓';}
+  catch(e){const ta=e('textarea');ta.value=t;ta.style.cssText='width:100%;height:180px;margin-top:12px';btn.after(ta);ta.focus();ta.select();btn.textContent='下の文章を選択してコピーしてください';}
+}
+function renderHistory(){
+  const sec=makeSection();makeHeader(sec,'LEARNING LOG','学習記録','このブラウザに保存された、DAY1の解答履歴です。');
+  const attempts=person().attempts;
+  if(!attempts.length){addText(sec,'p','intro','まだ記録がありません。DAY1の問題を解くとここに表示されます。');}
+  else{
+    const table=e('table','history');const thead=e('thead'),tr=e('tr');['日付','DAY','正解数'].forEach(x=>addText(tr,'th','',x));thead.append(tr);table.append(thead);
+    const tbody=e('tbody');attempts.slice(-10).reverse().forEach(a=>{const row=e('tr');addText(row,'td','',fmtDate(a.completedAt));addText(row,'td','','01');addText(row,'td','',safeScore(a)+' / 5');tbody.append(row);});table.append(tbody);sec.append(table);
+    const latestAttempt=latest();const wrong=latestAttempt.answers.filter(a=>!a.correct);
+    addText(sec,'div','notebox',wrong.length?'最新の要復習：'+wrong.map(a=>a.questionId+'（'+a.topic+'）').join('、'):'最新の結果：全問正解！');
+    sec.append(button('週末用の学習ログをコピー','secondary',event=>copyReport(event.currentTarget)));
+  }
+  const controls=e('div','stack space');sec.append(controls);
+  controls.append(button('学習画面に戻る','outline',()=>{view='home';render();scrollTop();}));
+  if(attempts.length)controls.append(button('この学習者の記録を削除','outline',()=>{
+    if(confirm(NAMES[profile]+'の学習記録をこの端末から削除します。元には戻せません。よろしいですか？')){
+      db.profiles[profile]={attempts:[],pending:null};saveDB();render();}
+  }));
+  addText(sec,'p','fine','保存先：この端末・このブラウザのローカルストレージ。ブラウザのデータ削除で消える可能性があります。親子の記録は同じ端末内では別々ですが、パスワードによる保護はありません。');
+}
+document.querySelectorAll('[data-profile]').forEach(b=>b.addEventListener('click',()=>setProfile(b.dataset.profile)));
+render();
+</script>
+</body>
+</html>
